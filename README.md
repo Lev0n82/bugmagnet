@@ -66,7 +66,7 @@ On Windows you can package the extension and produce a zip archive by running:
 powershell.exe -ExecutionPolicy Bypass -File .\package-extension.ps1
 ```
 
-The script installs dependencies, builds the extension and creates `bugmagnet-extension.zip` for easy distribution.
+The script installs dependencies, runs the test suite, builds the extension and creates `bugmagnet-extension.zip` for easy distribution.
 
 To run the automated test suite:
 

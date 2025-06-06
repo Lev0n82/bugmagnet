@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 
 npm run install-deps
+npm test
 npm run pack-extension
 
 $zipPath = Join-Path $PSScriptRoot 'bugmagnet-extension.zip'
