@@ -1,4 +1,4 @@
-/*global require, module, __dirname, process, console */
+/*global require, module, __dirname */
 const path = require('path'),
 	recursiveLs = require('fs-readdir-recursive'),
 	entries = {},
