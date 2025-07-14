@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Run Jasmine tests for options UI guidance",
+			"command": "npx jasmine --config=jasmine.json test/options-ui-guidance-spec.js",
+			"group": "test",
+			"isBackground": false
+		}
+	]
+}

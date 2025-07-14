@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BugMagnet Extension Options</title>
+  <style>
+		body { padding: 10px;  }
+		.file-selector {
+			display: none;
+		}
+		.sourceCell {
+			max-width: 200px;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+		#main {
+			height: 400px;
+			min-height: 300px;
+		}
+		#main th, #main td {
+			text-align: left;
+		}
+		#main table {
+			width: 100%;
+		}
+		.status {
+			color: red;
+		}
+		.tab {
+			display: none;
+		}
+		#sourceLocal:checked ~ [role="local-file"] {
+			display: block;
+		}
+		#sourceConfig:checked ~ [role="text-config"] {
+			display: block;
+		}
+		#sourceRemote:checked ~ [role="remote-config"] {
+			display: block;
+		}
+
+		textarea[role=custom-config-text] {
+			width: 100%;
+		}
+		.container {
+			max-height: 200px;
+			height: 200px;
+			overflow: scroll;
+		}
+		[role="main-screen"] div {
+			margin-bottom: 10px;
+		}
+		
+  </style>
+</head>
+<body>
+	<div id="main">
+		<div role="status" class="status"></div>
+		<div data-main-screen>
+			<div>
+				<form action="#">
+				<label><input type="checkbox" data-option-skipStandard> Hide standard menus</label>
+				</form>
+			</div>
+			<div>
+				<form action="#">
+					<button data-close>Close</button>
+					<button data-close>Close</button>
+					<button data-close>Close</button>
+					<button data-close>Close</button>
+				</form>
+			</div>
+			<div>
+				<form action="#">
+					<label><input type="checkbox" data-option-debugLogging> Enable Debug Logging</label>
+				</form>
+			</div>
+			<div data-no-custom>
+				There are no custom configuration files loaded.
+			</div>
+			<div data-yes-custom>
+				Custom configuration files currently loaded:
+				<div class="container">
+					<table>
+						<thead>
+							<tr><th>Name</th><th>Source</th><th></th></tr>
+						</thead>
+						<tbody>
+							<tr data-template>
+								<td data-name></td>
+								<td data-source class="sourceCell"></td>
+								<td><button data-remove>Remove</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div data-file-loader>
+			<form action="#">
+				<input type="radio" value="local" name="source" id="sourceLocal" checked="checked"><label for="sourceLocal">Local file</label>
+				<input type="radio" value="remote" name="source" id="sourceRemote"><label for="sourceRemote">Remote URL</label>
+				<input type="radio" value="source" name="source" id="sourceConfig"><label for="sourceConfig">Paste configuration</label>
+				<div>
+				<label>Descriptive submenu label (required): <input type="text" data-submenu-name required="true" /></label>
+				</div>
+				<div class="tab" data-local-file>
+					<button role="select-file-cover" class="select-file-cover">
+						Select File
+					</button>
+					<button data-back>Cancel</button>
+					<input type="file" role="file-selector" class="file-selector"/>
+				</div>
+				<div class="tab" data-text-config>
+					<textarea data-custom-config-text placeholder="paste configuration JSON"></textarea>
+					<div>
+						<button data-add-custom-config>Save</button>
+						<button data-back>Cancel</button>
+					</div>
+				</div>
+				<div class="tab" data-remote-config>
+					URL: <input data-remote-config-url placeholder="JSON file URL"/>
+					<div>
+						<button data-add-remote-config>Load</button>
+						<button data-back>Cancel</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		</div>
+		<hr/>
+		<div id="credentials">
+			<h2>Credential Settings</h2>
+			<div style="background: #f8f8e8; border: 1px solid #e0e0b0; padding: 10px; margin-bottom: 10px;">
+				<b>How to connect to Azure Key Vault as the signed-in user:</b>
+				<ol style="margin-top: 5px;">
+					<li>Enter your <b>Azure App Registration Client ID</b> and <b>Vault URL</b> below.<br>
+						<small>See <a href="docs/chrome-extension-keyvault-user-impersonation.md" target="_blank">setup instructions</a> for details.</small>
+					</li>
+					<li>Click <b>Login</b> to sign in with your Azure AD account and grant access to the vault.</li>
+					<li>Once authenticated, you can sync and manage secrets as your user.</li>
+				</ol>
+				<div style="margin-top: 5px; font-size: 0.95em; color: #666;">
+					<b>Tip:</b> If you see authentication errors, check your Azure AD app registration, permissions, and redirect URI.
+				</div>
+			</div>
+			<div data-cred-status class="status"></div>
+			<div>
+				<label for="user-id">User ID: <input type="text" data-user-id id="user-id" /></label>
+			</div>
+			<div>
+				<label for="password">Password: <input type="password" data-password id="password" /></label>
+			</div>
+			<div>
+				<label for="client-id">Client ID: <input type="text" data-client-id id="client-id" placeholder="e.g., d81f3ba2-ebf7-4d4c-8550-e642c3736d99" /></label>
+			</div>
+			<div>
+				<label for="vault-url">Vault URL: <input type="text" data-vault-url id="vault-url" placeholder="e.g., https://your-vault-name.vault.azure.net" /></label>
+			</div>
+			<div>
+				<label><input type="checkbox" data-save-credentials> Save Credentials</label>
+			</div>
+			<div>
+				Authentication Status: <span data-auth-status>Unknown</span>
+				<button data-auth-login>Login</button>
+			</div>
+			<div>
+				Connection Status: <span data-connection-status style="color: gray;">&#9679;</span> <span data-connection-status-text>Unknown</span>
+			</div>
+			<div style="margin: 10px 0; padding: 8px; background: #eef; border: 1px solid #ccd; font-size: 0.95em;">
+				<b>Need help?</b> See <a href="docs/chrome-extension-keyvault-user-impersonation.md" target="_blank">Chrome Extension Key Vault User Impersonation Guide</a> for step-by-step setup and troubleshooting.
+			</div>
+			<h3>Account Grouping Rules</h3>
+				<div class="container">
+					 <table data-grouping-rules-table>
+						<thead>
+							<tr><th>Group Name</th><th>RegEx Pattern</th><th></th></tr>
+						</thead>
+						<tbody>
+							<tr data-template>
+								<td><label for="group-name">Group Name:</label><input type="text" data-group-name id="group-name" /></td>
+								<td><label for="group-pattern">RegEx Pattern:</label><input type="text" data-group-pattern id="group-pattern" /></td>
+								<td><button data-remove-rule>Remove</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<button data-add-rule>Add Rule</button>
+				<hr/>
+				<h3>Test Accounts</h3>
+				<button data-sync-accounts>Sync Accounts from Vault</button>
+				<div class="container" data-accounts-container>
+					<ul data-accounts-list></ul>
+				</div>
+				<button data-save-credentials>Save Settings</button>
+		</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

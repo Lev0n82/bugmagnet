@@ -1,0 +1,28 @@
+{
+  "_comment": "Central environments registry. All port numbers and service endpoints must be unique. This file is NOT for secrets. Reference: D:/ for local resources.",
+  "environments": [
+    {
+      "name": "bugmagnet-extension",
+      "description": "Bug Magnet browser extension and test environment",
+      "ui": {
+        "component": "Extension Options UI",
+        "port": 3000,
+        "path": "D:/bugmagnet-master/bugmagnet-master/template/options.html"
+      },
+      "backend": {
+        "component": "Test/Mock API Server",
+        "port": 4000,
+        "path": "D:/bugmagnet-master/bugmagnet-master/test/mock-api-server.js"
+      },
+      "middle": [
+        {
+          "component": "Testem Runner",
+          "port": 7357,
+          "path": "D:/bugmagnet-master/bugmagnet-master/testem/runner.html"
+        }
+      ],
+      "notes": "Ports 3000, 4000, 7357 reserved for Bug Magnet. No other project may use these."
+    }
+    // Add additional projects below, following the same structure.
+  ]
+}

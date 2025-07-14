@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bug Magnet Key Vault User Impersonation Setup</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #fff; color: #222; }
+    h1 { color: #0078d4; }
+    pre, code { background: #f4f4f4; padding: 1em; border-radius: 4px; }
+    a { color: #0078d4; }
+  </style>
+</head>
+<body>
+  <h1>Bug Magnet Chrome Extension: Azure Key Vault User Impersonation Setup</h1>
+  <p>This guide explains how to configure the Bug Magnet extension for Azure Key Vault user impersonation using MSAL.js and delegated permissions.</p>
+  <h2>1. Azure AD App Registration</h2>
+  <ul>
+    <li>Register a new app in Azure AD.</li>
+    <li>Set <strong>Application (client) ID</strong> and <strong>Directory (tenant) ID</strong> in the extension config.</li>
+    <li>Add <strong>Delegated permissions</strong>: <code>https://vault.azure.net/user_impersonation</code></li>
+    <li>Set <strong>Redirect URI</strong> to <code>chrome-extension://[YOUR_EXTENSION_ID]/options.html</code></li>
+  </ul>
+  <h2>2. Extension Configuration</h2>
+  <ul>
+    <li>Open the extension options page.</li>
+    <li>Enter your <strong>Client ID</strong> and <strong>Tenant ID</strong>.</li>
+    <li>Click <strong>Log In</strong> to authenticate interactively.</li>
+  </ul>
+  <h2>3. Troubleshooting</h2>
+  <ul>
+    <li>Ensure your Azure AD app registration matches the extension's configuration.</li>
+    <li>Check the extension's DevTools panel for live status and config overrides.</li>
+    <li>For more details, see the <a href="https://github.com/bugmagnet/bugmagnet/blob/master/docs/chrome-extension-keyvault-user-impersonation.md" target="_blank">GitHub documentation</a>.</li>
+  </ul>
+  <h2>4. Security Notes</h2>
+  <ul>
+    <li>Never share your client secrets or credentials.</li>
+    <li>Use delegated permissions for user impersonation, not application permissions.</li>
+  </ul>
+</body>
+</html>

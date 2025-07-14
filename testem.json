@@ -1,0 +1,19 @@
+{
+  "test_page": "testem/runner.html",
+  "framework": "jasmine",
+  "src_files_on_page": [
+    "testem/compiled/**/*.js"
+  ],
+  "launchers": {
+    "ChromiumHeadless": {
+      "command": "c:\\automation\\chrome\\win64-138.0.7204.49\\chrome-win64\\chrome.exe --headless --disable-gpu --remote-debugging-port=9222 --no-sandbox",
+      "protocol": "browser"
+    }
+  },
+  "launch_in_dev": ["ChromiumHeadless"],
+  "launch_in_ci": ["ChromiumHeadless"],
+  "before_tests": "webpack --config webpack.testem.config.js",
+  "routes": {
+    "/jasmine": "node_modules/jasmine-core/lib/jasmine-core"
+  }
+}
