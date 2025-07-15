@@ -1,43 +1,43 @@
 {
-  "name": "bugmagnet",
-  "version": "2.0.0",
-  "scripts": {
-    "lint": "eslint src test",
-    "pretest": "npm run lint && rimraf testem/compiled",
-    "test": "jasmine",
-    "testem": "testem ci -R dot -f testem.js",
-    "pretest-browser": "npm run pretest",
-    "test-browser": "testem -f testem.js",
-    "pretest-chrome": "npm run pretest",
-    "test-chrome": "testem -l Chrome",
-    "sourcemap": "sourcemap-lookup",
-    "install-deps": "node scripts/installDependencies.js",
-    "prepack-extension": "rimraf pack && copyfiles -u 1 \"template/**/*\" pack/",
-    "pack-extension": "npm run install-deps && npm run prepack-extension && webpack --config webpack.config.js",
-    "debug": "webpack --config webpack.testem.config.js"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.27.4",
-    "@babel/eslint-parser": "^7.27.5",
-    "@babel/preset-env": "^7.27.2",
-    "@playwright/test": "^1.54.1",
-    "copyfiles": "^2.4.1",
-    "eslint": "^9.29.0",
-    "eslint-config-crockford": "^2.0.0",
-    "eslint-config-defaults": "^9.0.0",
-    "fs-readdir-recursive": "^1.1.0",
-    "jasmine": "^2.99.0",
-    "jsdom": "^22.1.0",
-    "rimraf": "^5.0.0",
-    "sourcemap-lookup": "0.0.3",
-    "testem": "^3.16.0",
-    "webpack": "^5.99.9",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-middleware": "^7.4.2"
-  },
-  "dependencies": {
-    "@azure/identity": "^4.10.2",
-    "@azure/keyvault-secrets": "^4.10.0",
-    "@azure/msal-browser": "^4.15.0"
-  }
+    "name":  "bugmagnet",
+    "version":  "2.0.2",
+    "scripts":  {
+                    "lint":  "eslint src test",
+                    "pretest":  "npm run lint \u0026\u0026 rimraf testem/compiled",
+                    "test":  "jasmine",
+                    "testem":  "testem ci -R dot -f testem.js",
+                    "pretest-browser":  "npm run pretest",
+                    "test-browser":  "testem -f testem.js",
+                    "pretest-chrome":  "npm run pretest",
+                    "test-chrome":  "testem -l Chrome",
+                    "sourcemap":  "sourcemap-lookup",
+                    "install-deps":  "node scripts/installDependencies.js",
+                    "prepack-extension":  "rimraf pack \u0026\u0026 copyfiles -u 1 \"template/**/*\" pack/",
+                    "pack-extension":  "npm run install-deps \u0026\u0026 npm run prepack-extension \u0026\u0026 webpack --config webpack.config.js",
+                    "debug":  "webpack --config webpack.testem.config.js"
+                },
+    "devDependencies":  {
+                            "@babel/core":  "^7.27.4",
+                            "@babel/eslint-parser":  "^7.27.5",
+                            "@babel/preset-env":  "^7.27.2",
+                            "@playwright/test":  "^1.54.1",
+                            "copyfiles":  "^2.4.1",
+                            "eslint":  "^9.29.0",
+                            "eslint-config-crockford":  "^2.0.0",
+                            "eslint-config-defaults":  "^9.0.0",
+                            "fs-readdir-recursive":  "^1.1.0",
+                            "jasmine":  "^2.99.0",
+                            "jsdom":  "^22.1.0",
+                            "rimraf":  "^5.0.0",
+                            "sourcemap-lookup":  "0.0.3",
+                            "testem":  "^3.16.0",
+                            "webpack":  "^5.99.9",
+                            "webpack-cli":  "^6.0.1",
+                            "webpack-dev-middleware":  "^7.4.2"
+                        },
+    "dependencies":  {
+                         "@azure/identity":  "^4.10.2",
+                         "@azure/keyvault-secrets":  "^4.10.0",
+                         "@azure/msal-browser":  "^4.15.0"
+                     }
 }
