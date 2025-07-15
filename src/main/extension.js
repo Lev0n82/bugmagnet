@@ -11,14 +11,16 @@ const ContextMenu = require('../lib/context-menu'),
 
 function initMenus() {
 	'use strict';
-	new ContextMenu(
-		standardConfig,
-		browserInterface,
-		new ChromeMenuBuilder(chrome),
-		processMenuObject,
-		!isFirefox
-	).init();
-	new CredentialContextMenu(browserInterface).init();
+	chrome.contextMenus.removeAll(() => {
+		new ContextMenu(
+			standardConfig,
+			browserInterface,
+			new ChromeMenuBuilder(chrome),
+			processMenuObject,
+			!isFirefox
+		).init();
+		new CredentialContextMenu(browserInterface).init();
+	});
 }
 
 chrome.runtime.onInstalled.addListener(initMenus);
