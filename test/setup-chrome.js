@@ -17,7 +17,7 @@ if (!global.chrome) {
     tabs: {
       create: () => {},
       executeScript: (tabId, details, cb) => cb && cb(),
-      sendMessage: (tabId, msg) => {},
+      sendMessage: () => {},
     },
     permissions: {
       request: (obj, cb) => cb && cb(true),
@@ -28,7 +28,7 @@ if (!global.chrome) {
     },
     identity: {
       getRedirectURL: () => 'http://localhost/',
-      launchWebAuthFlow: ({ url, interactive }, cb) => cb('http://localhost/#access_token=fake'),
+      launchWebAuthFlow: (_, cb) => cb('http://localhost/#access_token=fake'),
     },
   };
 }

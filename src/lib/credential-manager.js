@@ -10,8 +10,8 @@ module.exports = class CredentialManager {
 
     async loadOptions() {
         this.options = await this.browserInterface.getOptionsAsync() || {};
-        const manifestClientId = 'd81f3ba2-ebf7-4d4c-8550-e642c3736d99'; // From manifest.json
-        const clientId = this.options.clientId || manifestClientId;
+        const defaultClientId = process.env.AZURE_CLIENT_ID || '';
+        const clientId = this.options.clientId || defaultClientId;
         const vaultUrl = this.options.vaultUrl;
         const clientSecret = this.options.clientSecret || '';
         const tenantId = this.options.tenantId || '';

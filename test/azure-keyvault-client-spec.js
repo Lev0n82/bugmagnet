@@ -68,7 +68,7 @@ describe('AzureKeyVaultClient', () => {
                 json: () => Promise.resolve({ value: 'secret' })
             }));
 
-            const value = await client.getSecret('test@example.com');
+            await client.getSecret('test@example.com');
 
             expect(client.getAuthToken).toHaveBeenCalled();
             expect(window.fetch).toHaveBeenCalledWith('https://example.vault.azure.net/secrets/test--example-com?api-version=7.1', jasmine.any(Object));

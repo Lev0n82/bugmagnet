@@ -11,7 +11,6 @@ const EXTENSION_PATH = path.join(__dirname, '../pack');
 const TEST_PAGE = 'file://' + path.join(__dirname, '../pack/testpage.html');
 
 
-const EXTENSION_ID = 'dphodgchbjmodnigbppmcffcjecjookj';
 async function launchWithExtension(playwright) {
   const context = await playwright.chromium.launchPersistentContext('', {
     headless: false,
@@ -20,7 +19,12 @@ async function launchWithExtension(playwright) {
       `--load-extension=${EXTENSION_PATH}`
     ]
   });
-  context.extensionId = EXTENSION_ID;
+  const backgroundPage = context.serviceWorkers()[0] || context.backgroundPages()[0];
+  const url = backgroundPage ? backgroundPage.url() : '';
+  const match = url.match(/chrome-extension:\/\/([^\/]+)/);
+  if (match) {
+    context.extensionId = match[1];
+  }
   return context;
 }
 
@@ -30,7 +34,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();
@@ -47,7 +51,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();
@@ -122,7 +126,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();
