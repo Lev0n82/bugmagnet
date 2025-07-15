@@ -1,0 +1,3 @@
+c4f2310 Populate Azure Vault and Client ID from config.local.json, package v2.0.2
+967752d Automated version bump, release notes, and packaging improvements
+

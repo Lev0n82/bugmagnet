@@ -1,0 +1,28 @@
+{
+	"name": "Bug Magnet",
+	"description": "Right-click context menu to help with exploratory testing",
+	"version": "3.0",
+	"manifest_version": 3,
+	"permissions": ["contextMenus", "storage", "activeTab", "identity"],
+	"host_permissions": ["https://*.vault.azure.net/*"],
+	"optional_permissions": ["clipboardWrite", "clipboardRead"],
+	"oauth2": {
+		"client_id": "d81f3ba2-ebf7-4d4c-8550-e642c3736d99",
+		"scopes": [
+			"https://vault.azure.net/user_impersonation"
+		]
+	},
+	"background": {
+		"service_worker": "extension.js"
+	},
+	"icons": {
+		"128": "magnet.png",
+		"16": "magnet-16.png"
+	},
+	"homepage_url": "https://bugmagnet.org",
+	"author": "Gojko Adzic https://gojko.net",
+	"action": {},
+	"options_ui": {
+		"page": "options.html"
+	}
+}
