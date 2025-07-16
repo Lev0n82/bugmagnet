@@ -7,20 +7,28 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 
-const EXTENSION_PATH = path.join(__dirname, '../pack');
-const TEST_PAGE = 'file://' + path.join(__dirname, '../pack/testpage.html');
+const EXTENSION_PATH = path.join(__dirname, '../template');
+const TEST_PAGE = 'file://' + path.join(__dirname, '../template/testpage.html');
 
 
 async function launchWithExtension(playwright) {
   const context = await playwright.chromium.launchPersistentContext('', {
-    headless: false,
+    headless: true,
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`
     ]
   });
-  const backgroundPage = context.serviceWorkers()[0] || context.backgroundPages()[0];
-  const url = backgroundPage ? backgroundPage.url() : '';
+  let url = '';
+  try {
+    const background = await context.waitForEvent('backgroundpage', { timeout: 5000 });
+    url = background.url();
+  } catch {
+    try {
+      const sw = await context.waitForEvent('serviceworker', { timeout: 5000 });
+      url = sw.url();
+    } catch {}
+  }
   const match = url.match(/chrome-extension:\/\/([^\/]+)/);
   if (match) {
     context.extensionId = match[1];
