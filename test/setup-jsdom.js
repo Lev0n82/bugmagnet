@@ -41,7 +41,7 @@ try {
     testVaultConfig.vaultUrl = config.vaultUri || 'https://qa-dev-sc.vault.azure.net/';
     testVaultConfig.clientId = config.clientId || 'test-client-id';
   }
-} catch (e) {
+} catch {
   // fallback: use dummy values for tests
   testVaultConfig.vaultUrl = 'https://qa-dev-sc.vault.azure.net/';
   testVaultConfig.clientId = 'test-client-id';
@@ -85,7 +85,7 @@ const { JSDOM } = require('jsdom');
 if (!global.__JSDOM_SETUP__) {
   global.__JSDOM_SETUP__ = true;
   if (!global.JSDOM) {
-    global.JSDOM = require('jsdom').JSDOM;
+    global.JSDOM = JSDOM;
   }
 
   // Set up jsdom globally before any test files are loaded

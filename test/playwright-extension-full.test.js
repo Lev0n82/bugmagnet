@@ -7,20 +7,32 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 
-const EXTENSION_PATH = path.join(__dirname, '../pack');
-const TEST_PAGE = 'file://' + path.join(__dirname, '../pack/testpage.html');
+const EXTENSION_PATH = path.join(__dirname, '../template');
+const TEST_PAGE = 'file://' + path.join(__dirname, '../template/testpage.html');
 
 
-const EXTENSION_ID = 'dphodgchbjmodnigbppmcffcjecjookj';
 async function launchWithExtension(playwright) {
   const context = await playwright.chromium.launchPersistentContext('', {
-    headless: false,
+    headless: true,
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`
     ]
   });
-  context.extensionId = EXTENSION_ID;
+  let url = '';
+  try {
+    const background = await context.waitForEvent('backgroundpage', { timeout: 5000 });
+    url = background.url();
+  } catch {
+    try {
+      const sw = await context.waitForEvent('serviceworker', { timeout: 5000 });
+      url = sw.url();
+    } catch {}
+  }
+  const match = url.match(/chrome-extension:\/\/([^\/]+)/);
+  if (match) {
+    context.extensionId = match[1];
+  }
   return context;
 }
 
@@ -30,7 +42,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();
@@ -47,7 +59,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();
@@ -122,7 +134,7 @@ test.describe('Bug Magnet Extension - Full Feature Suite', () => {
     const page = await context.newPage();
     await page.goto(TEST_PAGE);
     // Open options page directly
-    const optionsUrl = `chrome-extension://${EXTENSION_ID}/options.html`;
+    const optionsUrl = `chrome-extension://${context.extensionId}/options.html`;
     const optionsPage = await context.newPage();
     await optionsPage.goto(optionsUrl);
     await optionsPage.waitForLoadState();

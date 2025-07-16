@@ -1,4 +1,3 @@
-/*global chrome*/
 module.exports = class AzureKeyVaultClient {
     constructor(clientId, vaultUrl, clientSecret, tenantId, scope) {
         this.apiVersion = '7.1';
@@ -7,15 +6,15 @@ module.exports = class AzureKeyVaultClient {
         this.clientSecret = clientSecret;
         this.tenantId = tenantId;
         this.scope = scope || 'https://vault.azure.net/.default';
-        if (!this.clientId || !this.clientSecret || !this.tenantId) {
-            throw new Error('Azure Key Vault client credentials are not fully configured. Please set Client ID, Client Secret, and Tenant ID.');
-        }
         this.accessToken = null;
     }
 
     async getAuthToken() {
         if (this.accessToken) {
             return this.accessToken;
+        }
+        if (!this.clientId || !this.clientSecret || !this.tenantId) {
+            throw new Error('Azure Key Vault client credentials are not fully configured. Please set Client ID, Client Secret, and Tenant ID.');
         }
         // Client Credentials Flow
         const tokenUrl = `https://login.microsoftonline.com/${this.tenantId}/oauth2/v2.0/token`;

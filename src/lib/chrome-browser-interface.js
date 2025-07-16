@@ -66,11 +66,20 @@ module.exports = function ChromeBrowserInterface(chrome) {
 			oFReader.readAsText(fileInfo, 'UTF-8');
 		});
 	};
-	self.executeScript = function (tabId, source) {
-		return new Promise((resolve) => {
-			return chrome.tabs.executeScript(tabId, {file: source}, resolve);
-		});
-	};
+        self.executeScript = function (tabId, source) {
+                return new Promise((resolve) => {
+                        if (chrome.scripting && chrome.scripting.executeScript) {
+                                chrome.scripting.executeScript({
+                                        target: { tabId: tabId },
+                                        files: [source]
+                                }, () => resolve());
+                        } else if (chrome.tabs && chrome.tabs.executeScript) {
+                                chrome.tabs.executeScript(tabId, {file: source}, resolve);
+                        } else {
+                                resolve();
+                        }
+                });
+        };
 	self.sendMessage = function (tabId, message) {
 		return chrome.tabs.sendMessage(tabId, message);
 	};
@@ -94,18 +103,44 @@ module.exports = function ChromeBrowserInterface(chrome) {
 	self.removePermissions = function (permissionsArray) {
 		return new Promise((resolve) => chrome.permissions.remove({permissions: permissionsArray}, resolve));
 	};
-	self.copyToClipboard = function (text) {
-		const handler = function (e) {
-			e.clipboardData.setData('text/plain', text);
-			e.preventDefault();
-		};
-		document.addEventListener('copy', handler);
-		document.execCommand('copy');
-		document.removeEventListener('copy', handler);
-	};
-	self.showMessage = function (text) {
-		chrome.tabs.executeScript(null, {code: `alert("${text}")`});
-	};
+        self.copyToClipboard = function (text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).catch(() => {
+                                const handler = function (e) {
+                                        e.clipboardData.setData('text/plain', text);
+                                        e.preventDefault();
+                                };
+                                document.addEventListener('copy', handler);
+                                document.execCommand('copy');
+                                document.removeEventListener('copy', handler);
+                        });
+                } else {
+                        const handler = function (e) {
+                                e.clipboardData.setData('text/plain', text);
+                                e.preventDefault();
+                        };
+                        document.addEventListener('copy', handler);
+                        document.execCommand('copy');
+                        document.removeEventListener('copy', handler);
+                }
+        };
+        self.showMessage = function (text) {
+                const code = `alert(${JSON.stringify(text)})`;
+                if (chrome.scripting && chrome.tabs) {
+                        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                                const activeTab = tabs && tabs[0];
+                                if (activeTab) {
+                                        chrome.scripting.executeScript({
+                                                target: { tabId: activeTab.id },
+                                                func: (msg) => alert(msg),
+                                                args: [text]
+                                        });
+                                }
+                        });
+                } else if (chrome.tabs && chrome.tabs.executeScript) {
+                        chrome.tabs.executeScript(null, {code});
+                }
+        };
 	// Add a createContextMenu method to ensure id is passed as a string
 	self.createContextMenu = function (props) {
 		if (props && props.id) {
